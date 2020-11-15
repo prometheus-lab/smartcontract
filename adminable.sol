@@ -29,25 +29,29 @@ contract Adminable {
         return _admins[account];
     }
 
-    function setAdmin(address account, bool state) public payable {
-        require(_owner == msg.sender, "Not owner called");
+    function setAdmin(address account, bool state) public onlyOwner payable {
+        require(account != address(0), "New admin is null address")
+        
         _admins[account] = state;
     }
 
-    function transferOwner(address account) public payable {
-        require(account != address(0));
+    function transferOwner(address account) public onlyOwner payable {
+        require(account != address(0), "New owner is null address");
 
         _pendingOwnerAddr = account;
         _pendingOwnerBlockNumber = block.number;
     }
 
-    function approveTransferOwner() public payable {
+    function approveTransferOwner() public onlyOwner payable {
+        require(_pendingOwnerAddr != address(0), "New owner is null address");
+        require(_pendingOwnerBlockNumber != 0, "Indefinite confirmation");
         require(block.number-_pendingOwnerBlockNumber >= 4320, "You can only confirm the transfer after 4320 blocks");
+
         _owner = _pendingOwnerAddr;
         _cancelTransferOwner();
     }
 
-    function cancelTransferOwner() public payable {
+    function cancelTransferOwner() public onlyOwner payable {
         _cancelTransferOwner();
     }
 

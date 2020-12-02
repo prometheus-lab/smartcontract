@@ -29,7 +29,7 @@ contract Adminable {
     }
 
     function setAdmin(address account, bool state) public onlyOwner payable {
-        require(account != address(0), "New admin is null address")
+        require(account != address(0), "New admin is null address");
         
         _admins[account] = state;
     }

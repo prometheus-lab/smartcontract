@@ -8,7 +8,6 @@ contract Adminable {
     address private _pendingOwnerAddr;
     uint private _pendingOwnerBlockNumber;
     mapping (address => bool) private _admins;
-    mapping (address => bool) private _blackList;
 
     modifier onlyOwner {
         require(msg.sender == _owner, "Sender not owner");
